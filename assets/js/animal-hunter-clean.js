@@ -132,8 +132,17 @@ class AnimalHunterGame {
 
     // 事件綁定
     _bindEvents() {
-        // 遊戲區域點擊事件
+        // 追蹤觸控狀態
+        this._touchStartTarget = null;
+        this._touchHandled = false;
+
+        // 遊戲區域點擊事件（作為觸控的後備）
         Utils.on(this.gameArea, 'click', (e) => {
+            // 如果觸控已處理，跳過點擊事件以避免重複處理
+            if (this._touchHandled) {
+                this._touchHandled = false;
+                return;
+            }
             if (e.target.classList.contains('animal')) {
                 this._handleAnimalClick(e.target);
             }
@@ -144,10 +153,61 @@ class AnimalHunterGame {
             e.preventDefault();
         });
 
-        // 觸控優化
+        // 強化觸控支持
         if (Utils.isMobile()) {
+            // 觸控開始 - 記錄觸控目標和提供視覺反饋
             Utils.on(this.gameArea, 'touchstart', (e) => {
                 e.preventDefault();
+                this._touchStartTarget = e.target;
+                this._touchHandled = false;
+                
+                // 添加觸控按下效果
+                if (e.target.classList.contains('animal')) {
+                    this._addTouchPressEffect(e.target);
+                }
+            });
+
+            // 觸控結束 - 處理點擊並移除效果
+            Utils.on(this.gameArea, 'touchend', (e) => {
+                e.preventDefault();
+                
+                if (this._touchStartTarget && this._touchStartTarget.classList.contains('animal')) {
+                    // 移除觸控效果
+                    this._removeTouchPressEffect(this._touchStartTarget);
+                    
+                    // 檢查觸控是否在同一個動物上結束
+                    const touch = e.changedTouches[0];
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    
+                    if (elementBelow === this._touchStartTarget) {
+                        this._handleAnimalClick(this._touchStartTarget);
+                        this._touchHandled = true;
+                    }
+                }
+                
+                this._touchStartTarget = null;
+            });
+
+            // 觸控取消 - 清理狀態
+            Utils.on(this.gameArea, 'touchcancel', (e) => {
+                if (this._touchStartTarget && this._touchStartTarget.classList.contains('animal')) {
+                    this._removeTouchPressEffect(this._touchStartTarget);
+                }
+                this._touchStartTarget = null;
+                this._touchHandled = false;
+            });
+
+            // 觸控移動 - 檢查是否離開原始目標
+            Utils.on(this.gameArea, 'touchmove', (e) => {
+                if (this._touchStartTarget) {
+                    const touch = e.touches[0];
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    
+                    // 如果移動到目標外，移除按下效果
+                    if (elementBelow !== this._touchStartTarget && this._touchStartTarget.classList.contains('animal')) {
+                        this._removeTouchPressEffect(this._touchStartTarget);
+                    }
+                }
             });
         }
     }
@@ -461,6 +521,30 @@ class AnimalHunterGame {
                 feedback.parentNode.removeChild(feedback);
             }
         });
+    }
+
+    // 觸控效果方法
+    _addTouchPressEffect(element) {
+        if (!element) return;
+        
+        // 添加觸控按下的視覺效果
+        element.classList.add('touch-pressed');
+        element.style.transform = 'scale(0.95)';
+        element.style.filter = 'brightness(0.8) saturate(1.2)';
+        element.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.2)';
+        
+        // 強化震動反饋
+        Utils.vibrate([30, 20, 30]);
+    }
+
+    _removeTouchPressEffect(element) {
+        if (!element) return;
+        
+        // 移除觸控按下效果
+        element.classList.remove('touch-pressed');
+        element.style.transform = '';
+        element.style.filter = '';
+        element.style.boxShadow = '';
     }
 
     // 顯示更新
