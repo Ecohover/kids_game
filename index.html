@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>動物獵人遊戲 - 學習動物分類</title>
+    <title>小朋友遊戲中心</title>
     <style>
         body {
             margin: 0;
@@ -18,7 +18,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><polygon points="4,4 28,16 16,18 14,30" fill="%23ff6b6b" stroke="%23fff" stroke-width="2"/><circle cx="6" cy="6" r="2" fill="%23fdcb6e"/></svg>'), auto;
             position: relative;
         }
 
@@ -46,523 +45,94 @@
             opacity: 0.6;
         }
 
-        .game-container {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
+        .container {
             max-width: 1200px;
             width: 100%;
-        }
-
-        .left-panel {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-        }
-
-        /* 手機版響應式設計 */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            h1 {
-                font-size: 2em;
-                margin-bottom: 15px;
-            }
-            
-            .game-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .left-panel {
-                width: 100%;
-            }
-            
-            .stats-panel {
-                width: 100%;
-                max-height: none;
-                order: -1; /* 統計面板移到上方 */
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 5px;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-                margin-bottom: 10px;
-            }
+            z-index: 1;
         }
 
         h1 {
             color: white;
-            font-size: 2.5em;
+            font-size: 3em;
+            text-align: center;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
         }
 
-        .game-area {
-            width: 100%;
-            max-width: 600px;
-            height: 500px;
-            background: 
-                /* 海洋波浪效果 */
-                radial-gradient(ellipse at top, rgba(135, 206, 235, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse 120% 80% at 70% 20%, rgba(70, 130, 180, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse 120% 80% at 30% 15%, rgba(70, 130, 180, 0.2) 0%, transparent 50%),
-                /* 森林樹影效果 */
-                radial-gradient(ellipse 80% 60% at 20% 85%, rgba(34, 139, 34, 0.4) 0%, transparent 50%),
-                radial-gradient(ellipse 100% 70% at 80% 90%, rgba(46, 139, 87, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 50% at 50% 80%, rgba(34, 139, 34, 0.3) 0%, transparent 50%),
-                /* 主要漸層背景 */
-                linear-gradient(to bottom, 
-                    #87CEEB 0%,     /* 天空藍 */
-                    #4682B4 25%,    /* 鋼藍 */
-                    #20B2AA 45%,    /* 亮海綠 */
-                    #2E8B57 65%,    /* 海綠 */
-                    #228B22 85%,    /* 森林綠 */
-                    #006400 100%    /* 深綠 */
-                );
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            border: 3px solid rgba(255,255,255,0.3);
-        }
-
-        /* 手機版遊戲區域 */
-        @media (max-width: 768px) {
-            .game-area {
-                height: 400px;
-                max-width: 100%;
-                margin: 0 auto;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .game-area {
-                height: 350px;
-                border-radius: 15px;
-            }
-        }
-
-        .game-area::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                /* 海洋區域裝飾 */
-                radial-gradient(circle 20px at 15% 15%, rgba(255,255,255,0.6) 0%, transparent 70%),
-                radial-gradient(circle 15px at 85% 25%, rgba(255,255,255,0.5) 0%, transparent 70%),
-                radial-gradient(circle 25px at 50% 10%, rgba(255,255,255,0.4) 0%, transparent 70%),
-                /* 氣泡效果 */
-                radial-gradient(circle 8px at 25% 30%, rgba(173,216,230,0.8) 0%, transparent 70%),
-                radial-gradient(circle 6px at 75% 35%, rgba(173,216,230,0.7) 0%, transparent 70%),
-                radial-gradient(circle 10px at 60% 20%, rgba(173,216,230,0.6) 0%, transparent 70%),
-                /* 森林區域裝飾 */
-                radial-gradient(ellipse 40px 60px at 10% 85%, rgba(0,100,0,0.3) 0%, transparent 70%),
-                radial-gradient(ellipse 50px 70px at 90% 80%, rgba(34,139,34,0.3) 0%, transparent 70%),
-                radial-gradient(ellipse 35px 50px at 70% 90%, rgba(0,128,0,0.3) 0%, transparent 70%),
-                radial-gradient(ellipse 45px 65px at 30% 75%, rgba(46,139,87,0.3) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .stats-panel {
-            width: 300px;
+        .intro {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            padding: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-height: 600px;
-            overflow-y: auto;
+            text-align: center;
         }
 
-        /* 手機版統計面板 */
-        @media (max-width: 768px) {
-            .stats-panel {
-                width: 100%;
-                padding: 15px;
-                max-height: 300px;
-                border-radius: 15px;
-                margin-bottom: 15px;
-            }
-            
-            .stats-title {
-                font-size: 1.3em;
-                margin-bottom: 12px;
-            }
-            
-            .category-title {
-                font-size: 1.1em;
-                margin-bottom: 8px;
-            }
-            
-            .stat-item {
-                padding: 6px 10px;
-                font-size: 0.9em;
-            }
-            
-            .click-item {
-                padding: 6px;
-                font-size: 0.8em;
-            }
-            
-            .recent-clicks {
-                margin-top: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .stats-panel {
-                padding: 12px;
-                max-height: 250px;
-                border-radius: 12px;
-            }
-            
-            .stats-title {
-                font-size: 1.2em;
-                margin-bottom: 10px;
-            }
-            
-            .category-title {
-                font-size: 1em;
-                margin-bottom: 6px;
-            }
-            
-            .stat-item {
-                padding: 5px 8px;
-                font-size: 0.85em;
-            }
-            
-            .click-item {
-                padding: 5px;
-                font-size: 0.75em;
-            }
-        }
-
-        .stats-title {
-            font-size: 1.5em;
-            font-weight: bold;
+        .intro h2 {
             color: #2d3436;
-            margin-bottom: 15px;
-            text-align: center;
-            border-bottom: 2px solid #00b894;
-            padding-bottom: 10px;
-        }
-
-        .stat-category {
-            margin-bottom: 20px;
-        }
-
-        .category-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            margin: 5px 0;
-            background: rgba(116, 185, 255, 0.1);
-            border-radius: 10px;
-            border-left: 4px solid;
-        }
-
-        .carnivore-stat { border-left-color: #ff6b6b; }
-        .herbivore-stat { border-left-color: #00b894; }
-        .omnivore-stat { border-left-color: #fdcb6e; }
-
-        .stat-count {
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-
-        .recent-clicks {
-            margin-top: 20px;
-        }
-
-        .click-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px;
-            margin: 5px 0;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            font-size: 0.9em;
-        }
-
-        .click-result {
-            font-weight: bold;
-        }
-
-        .correct { color: #00b894; }
-        .incorrect { color: #d63031; }
-
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-            gap: 20px;
-        }
-
-        /* 手機版遊戲資訊 */
-        @media (max-width: 768px) {
-            .game-info {
-                flex-wrap: wrap;
-                gap: 10px;
-                margin: 15px 0;
-                justify-content: center;
-            }
-            
-            .score, .level-info {
-                font-size: 0.9em;
-            }
-            
-            .lives {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .game-info {
-                gap: 8px;
-                margin: 10px 0;
-            }
-            
-            .score, .level-info {
-                font-size: 0.8em;
-            }
-            
-            .heart {
-                font-size: 1.2em;
-            }
-        }
-
-        .lives {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-
-        .heart {
-            font-size: 1.5em;
-            transition: all 0.3s ease;
-        }
-
-        .heart.lost {
-            opacity: 0.3;
-            filter: grayscale(100%);
-        }
-
-        .level-info {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 10px 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        .game-over {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .game-over-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-            max-width: 400px;
-        }
-
-        .game-over h2 {
-            color: #d63031;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-
-        .final-stats {
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .animal {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            position: absolute;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><polygon points="4,4 28,16 16,18 14,30" fill="%23ff6b6b" stroke="%23fff" stroke-width="2"/><circle cx="6" cy="6" r="2" fill="%23fdcb6e"/></svg>'), auto;
-            transition: transform 0.1s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5em;
-            border: 3px solid #fff;
-            z-index: 10;
-            /* 觸控優化 */
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-touch-callout: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* 手機版動物大小調整 */
-        @media (max-width: 768px) {
-            .animal {
-                width: 70px;
-                height: 70px;
-                font-size: 2.2em;
-                cursor: pointer; /* 手機版使用標準指標 */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .animal {
-                width: 60px;
-                height: 60px;
-                font-size: 2em;
-            }
-        }
-
-        .animal:hover {
-            transform: scale(1.1);
-        }
-
-        .animal:active {
-            transform: scale(0.9);
-        }
-
-        .score {
-            color: white;
             font-size: 2em;
-            margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
         }
 
-        .controls {
-            margin: 20px 0;
-        }
-
-        .rules {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            max-width: 600px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        /* 手機版規則說明 */
-        @media (max-width: 768px) {
-            .rules {
-                margin: 15px 0;
-                padding: 15px;
-                max-width: 100%;
-            }
-            
-            .rule-item {
-                font-size: 0.9em;
-                margin: 8px 0;
-            }
-            
-            .rule-ball {
-                width: 25px;
-                height: 25px;
-                margin-right: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .rules {
-                margin: 10px 0;
-                padding: 12px;
-                border-radius: 12px;
-            }
-            
-            .rule-item {
-                font-size: 0.8em;
-            }
-        }
-
-        .rules.collapsed {
-            padding: 10px 20px;
-        }
-
-        .rules.collapsed .rule-content {
-            display: none;
-        }
-
-        .toggle-rules {
-            background: none;
-            border: none;
-            font-size: 1.1em;
-            cursor: pointer;
-            color: #2d3436;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .toggle-rules:hover {
-            color: #00b894;
-        }
-
-        .rule-item {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
+        .intro p {
+            color: #636e72;
             font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 10px;
         }
 
-        .rule-ball {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 15px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
 
-        .good-ball {
-            border: 3px solid #00b894;
+        .game-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-align: center;
         }
 
-        .bad-ball {
-            border: 3px solid #d63031;
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
 
-        button {
+        .game-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .game-title {
+            color: #2d3436;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .game-description {
+            color: #636e72;
+            font-size: 1.1em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .game-features {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .game-features li {
+            color: #00b894;
+            margin-bottom: 8px;
+        }
+
+        .play-button {
             background: #00b894;
             color: white;
             border: none;
@@ -570,597 +140,265 @@
             font-size: 1.2em;
             border-radius: 25px;
             cursor: pointer;
-            margin: 0 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: all 0.3s;
-            /* 觸控優化 */
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
+            width: 100%;
         }
 
-        /* 手機版按鈕 */
-        @media (max-width: 768px) {
-            button {
-                padding: 12px 25px;
-                font-size: 1.1em;
-                margin: 5px;
-                min-height: 44px; /* iOS 建議的最小觸控區域 */
-            }
-            
-            .controls {
-                margin: 15px 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            button {
-                padding: 10px 20px;
-                font-size: 1em;
-                margin: 3px;
-                border-radius: 20px;
-            }
-            
-            .controls {
-                margin: 10px 0;
-            }
-        }
-
-        button:hover {
+        .play-button:hover {
             background: #00a085;
             transform: translateY(-2px);
         }
 
-        button:active {
-            transform: translateY(0);
+        .safety-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-left: 5px solid #fdcb6e;
         }
 
-        .celebration {
+        .safety-info h3 {
+            color: #e17055;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .safety-info p {
+            color: #636e72;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        /* 護眼休息提醒系統 */
+        .eye-protection-overlay {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3em;
-            color: #fdcb6e;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-            z-index: 1000;
-            animation: bounce 0.5s;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
             display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            flex-direction: column;
         }
 
-        @keyframes bounce {
-            0%, 20%, 60%, 100% { transform: translate(-50%, -50%) translateY(0); }
-            40% { transform: translate(-50%, -50%) translateY(-30px); }
-            80% { transform: translate(-50%, -50%) translateY(-15px); }
+        .rest-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            margin: 20px;
+        }
+
+        .rest-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .rest-title {
+            color: #2d3436;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .rest-message {
+            color: #636e72;
+            font-size: 1.3em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .countdown {
+            font-size: 3em;
+            color: #00b894;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00b894, #55a3ff);
+            transition: width 1s ease;
+        }
+
+        /* 手機版響應式 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .intro, .game-card, .safety-info {
+                padding: 20px;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .game-icon {
+                font-size: 3em;
+            }
+            
+            .rest-content {
+                padding: 30px 20px;
+            }
+            
+            .rest-title {
+                font-size: 2em;
+            }
+            
+            .countdown {
+                font-size: 2.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .intro, .game-card, .safety-info {
+                padding: 15px;
+            }
+            
+            .game-icon {
+                font-size: 2.5em;
+            }
+            
+            .rest-content {
+                padding: 25px 15px;
+            }
         }
     </style>
 </head>
-<body>
-    <h1>🏹 動物獵人遊戲 🦁</h1>
-    
-    <div class="game-container">
-        <div class="left-panel">
-            <div class="rules" id="rulesPanel">
-                <button class="toggle-rules" onclick="toggleRules()">
-                    <span id="rulesTitle">🎯 遊戲規則：只能獵捕肉食動物！</span>
-                    <span id="toggleIcon">📖</span>
-                </button>
-                <div class="rule-content" id="ruleContent">
-                    <div class="rule-item">
-                        <div class="rule-ball good-ball" style="background: #ff6b6b; font-size: 1.5em; display: flex; align-items: center; justify-content: center;">🦁</div>
-                        <span>肉食動物 = +20分 ✅ (獅子、老虎、鯊魚)</span>
-                    </div>
-                    <div class="rule-item">
-                        <div class="rule-ball bad-ball" style="background: #00b894; font-size: 1.5em; display: flex; align-items: center; justify-content: center;">🐄</div>
-                        <span>草食動物 = -10分 ❌ 不要獵捕！(牛、羊、兔子)</span>
-                    </div>
-                    <div class="rule-item">
-                        <div class="rule-ball bad-ball" style="background: #fdcb6e; font-size: 1.5em; display: flex; align-items: center; justify-content: center;">🐻</div>
-                        <span>雜食動物 = -15分 ⚠️ 也不要獵捕！(熊、豬、猴子)</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="game-info">
-                <div class="score">分數: <span id="score">0</span></div>
-                <div class="level-info">
-                    <div>等級: <span id="level">1</span></div>
-                </div>
-                <div class="lives">
-                    <span>生命: </span>
-                    <div id="heartsContainer"></div>
-                </div>
-            </div>
-            
-            <div class="game-area" id="gameArea"></div>
-            <div class="controls">
-                <button onclick="startGame()">開始遊戲</button>
-                <button onclick="resetGame()">重新開始</button>
-            </div>
-        </div>
+<body class="home-page">
+    <div class="container">
+        <h1>🎮 小朋友手部訓練遊戲中心 🎮</h1>
         
-        <div class="stats-panel">
-            <div class="stats-title">📊 遊戲統計</div>
-            
-            <div class="stat-category">
-                <div class="category-title">
-                    🎯 正確獵捕 (肉食動物)
-                </div>
-                <div id="carnivoreStats"></div>
-            </div>
-            
-            <div class="stat-category">
-                <div class="category-title">
-                    ❌ 誤獵草食動物
-                </div>
-                <div id="herbivoreStats"></div>
-            </div>
-            
-            <div class="stat-category">
-                <div class="category-title">
-                    ⚠️ 誤獵雜食動物
-                </div>
-                <div id="omnivoreStats"></div>
-            </div>
-            
-            <div class="recent-clicks">
-                <div class="category-title">
-                    📝 最近點擊記錄
-                </div>
-                <div id="recentClicks"></div>
-            </div>
+        <div class="intro">
+            <h2>歡迎來到訓練遊戲世界！</h2>
+            <p>🎯 專為小朋友設計的手部精細動作訓練遊戲</p>
+            <p>✨ 在快樂遊戲中提升手眼協調能力</p>
+            <p>🧠 同時學習動物分類等知識</p>
         </div>
-    </div>
-    
-    <div class="game-over" id="gameOver">
-        <div class="game-over-content">
-            <h2>遊戲結束！ 💔</h2>
-            <p>你的生命用完了...</p>
-            <div class="final-stats">
-                <div>最終分數: <span id="finalScore">0</span></div>
-                <div>達到等級: <span id="finalLevel">1</span></div>
-                <div>總獵捕數: <span id="totalHunts">0</span></div>
-            </div>
-            <button onclick="restartGame()" style="background: #00b894; color: white; padding: 15px 30px; border: none; border-radius: 25px; font-size: 1.2em; cursor: pointer;">再玩一次</button>
-        </div>
-    </div>
-    
-    <div class="celebration" id="celebration">太棒了! 🎉</div>
 
+        <div class="games-grid" id="gamesGrid">
+            <div class="game-card" data-game-id="animal-hunter" onclick="playGame('animal-hunter')">
+                <div class="game-icon">🏹🦁</div>
+                <div class="game-title">動物獵人遊戲</div>
+                <div class="game-description">
+                    在美麗的森林海洋世界中，學習辨識肉食、草食、雜食動物，訓練反應速度和手部精細動作！
+                </div>
+                <ul class="game-features">
+                    <li>🎯 手眼協調訓練</li>
+                    <li>🧠 動物分類學習</li>
+                    <li>⚡ 反應速度提升</li>
+                    <li>🏆 分級挑戰系統</li>
+                </ul>
+                <button class="play-button">開始遊戲 →</button>
+            </div>
+
+        </div>
+
+        <div class="safety-info">
+            <h3>👁️ 護眼小提醒</h3>
+            <p>🕐 每遊戲20分鐘會自動休息1分鐘</p>
+            <p>👀 休息時請看向遠方，保護你的眼睛</p>
+            <p>💝 適度遊戲有益身心健康</p>
+        </div>
+    </div>
+
+    <!-- 護眼休息提醒覆蓋層 -->
+    <div class="eye-protection-overlay" id="eyeProtectionOverlay">
+        <div class="rest-content">
+            <div class="rest-icon">👁️‍🗨️</div>
+            <div class="rest-title">護眼時間到！</div>
+            <div class="rest-message">
+                小朋友，你已經玩了20分鐘了！<br>
+                現在讓眼睛休息一下，看看遠方的風景吧～
+            </div>
+            <div class="countdown" id="countdown">60</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p style="color: #636e72;">休息結束後可以繼續遊戲哦！</p>
+        </div>
+    </div>
+
+    <!-- 載入模塊化 JavaScript - Clean Code 版本 -->
+    <script src="assets/js/utils/dom-utils.js"></script>
+    <script src="assets/js/utils/storage-utils.js"></script>
+    <script src="assets/js/utils/url-utils.js"></script>
+    <script src="assets/js/utils/math-utils.js"></script>
+    <script src="assets/js/utils/device-utils.js"></script>
+    <script src="assets/js/utils/function-utils.js"></script>
+    <script src="assets/js/utils-clean.js"></script>
+    <script src="assets/js/eye-protection-clean.js"></script>
+    <script src="assets/js/home-clean.js"></script>
+    
     <script>
-        let score = 0;
-        let gameActive = false;
-        let ballCreationInterval;
-        let stats = {
-            carnivore: {},
-            herbivore: {},
-            omnivore: {}
-        };
-        let recentClicks = [];
-        let level = 1;
-        let lives = 10;
-        let missedAnimals = 0;
-        let totalHunts = 0;
-        let currentSpeed = 3000; // 初始速度3秒
-        
-        const allAnimalTypes = {
-            level1: {
-                carnivore: [
-                    { emoji: '🦁', color: '#ff6b6b', points: 20, name: '獅子', type: '肉食' },
-                    { emoji: '🐅', color: '#ff7675', points: 20, name: '老虎', type: '肉食' },
-                    { emoji: '🦈', color: '#74b9ff', points: 20, name: '鯊魚', type: '肉食' },
-                    { emoji: '🐺', color: '#636e72', points: 20, name: '狼', type: '肉食' }
-                ],
-                herbivore: [
-                    { emoji: '🐄', color: '#00b894', points: -10, name: '牛', type: '草食' },
-                    { emoji: '🐑', color: '#55a3ff', points: -10, name: '羊', type: '草食' },
-                    { emoji: '🐰', color: '#fd79a8', points: -10, name: '兔子', type: '草食' },
-                    { emoji: '🦌', color: '#a29bfe', points: -10, name: '鹿', type: '草食' }
-                ],
-                omnivore: [
-                    { emoji: '🐻', color: '#fdcb6e', points: -15, name: '熊', type: '雜食' },
-                    { emoji: '🐷', color: '#e17055', points: -15, name: '豬', type: '雜食' },
-                    { emoji: '🐵', color: '#00cec9', points: -15, name: '猴子', type: '雜食' }
-                ]
-            },
-            level5: {
-                carnivore: [
-                    { emoji: '🐆', color: '#ff6348', points: 25, name: '豹', type: '肉食' },
-                    { emoji: '🦅', color: '#8b4513', points: 25, name: '老鷹', type: '肉食' },
-                    { emoji: '🐊', color: '#228b22', points: 25, name: '鱷魚', type: '肉食' }
-                ],
-                herbivore: [
-                    { emoji: '🐘', color: '#708090', points: -12, name: '大象', type: '草食' },
-                    { emoji: '🦏', color: '#696969', points: -12, name: '犀牛', type: '草食' },
-                    { emoji: '🦒', color: '#daa520', points: -12, name: '長頸鹿', type: '草食' }
-                ],
-                omnivore: [
-                    { emoji: '🐼', color: '#000000', points: -18, name: '熊貓', type: '雜食' },
-                    { emoji: '🦝', color: '#8b7355', points: -18, name: '浣熊', type: '雜食' }
-                ]
-            },
-            level10: {
-                carnivore: [
-                    { emoji: '🦑', color: '#4b0082', points: 30, name: '章魚', type: '肉食' },
-                    { emoji: '🐙', color: '#ff1493', points: 30, name: '烏賊', type: '肉食' },
-                    { emoji: '🦞', color: '#ff4500', points: 30, name: '龍蝦', type: '肉食' }
-                ],
-                herbivore: [
-                    { emoji: '🐋', color: '#1e90ff', points: -15, name: '鯨魚', type: '草食' },
-                    { emoji: '🐢', color: '#006400', points: -15, name: '海龜', type: '草食' },
-                    { emoji: '🦭', color: '#2f4f4f', points: -15, name: '海豹', type: '草食' }
-                ],
-                omnivore: [
-                    { emoji: '🐧', color: '#000080', points: -20, name: '企鵝', type: '雜食' },
-                    { emoji: '🦆', color: '#008b8b', points: -20, name: '鴨子', type: '雜食' }
-                ]
-            },
-            level15: {
-                carnivore: [
-                    { emoji: '🦖', color: '#8b0000', points: 35, name: '暴龍', type: '肉食' },
-                    { emoji: '🐉', color: '#ff6347', points: 35, name: '龍', type: '肉食' },
-                    { emoji: '🦇', color: '#2f2f2f', points: 35, name: '蝙蝠', type: '肉食' }
-                ],
-                herbivore: [
-                    { emoji: '🦕', color: '#90ee90', points: -18, name: '長頸龍', type: '草食' },
-                    { emoji: '🐨', color: '#808080', points: -18, name: '無尾熊', type: '草食' },
-                    { emoji: '🦘', color: '#cd853f', points: -18, name: '袋鼠', type: '草食' }
-                ],
-                omnivore: [
-                    { emoji: '🐺', color: '#4682b4', points: -22, name: '北極狼', type: '雜食' },
-                    { emoji: '🦊', color: '#ff8c00', points: -22, name: '狐狸', type: '雜食' }
-                ]
+        // 全域變數
+        let eyeProtection = null;
+
+        function playGame(gameType) {
+            if (gameType === 'animal-hunter') {
+                // 使用通用方法導航，自動保持所有 URL 參數
+                URLUtils.navigateWithParams('animal-hunter.html', URLUtils.getUrlParams());
             }
-        };
-        
-        let currentAnimalTypes = {};
-        
-        function createAnimal() {
-            if (!gameActive) return;
-            
-            const gameArea = document.getElementById('gameArea');
-            const animal = document.createElement('div');
-            animal.className = 'animal';
-            
-            // 選擇動物類型 (60%肉食, 25%草食, 15%雜食)
-            let animalType;
-            const rand = Math.random();
-            if (rand < 0.6) {
-                animalType = currentAnimalTypes.carnivore[Math.floor(Math.random() * currentAnimalTypes.carnivore.length)];
-            } else if (rand < 0.85) {
-                animalType = currentAnimalTypes.herbivore[Math.floor(Math.random() * currentAnimalTypes.herbivore.length)];
-            } else {
-                animalType = currentAnimalTypes.omnivore[Math.floor(Math.random() * currentAnimalTypes.omnivore.length)];
-            }
-            
-            animal.style.backgroundColor = animalType.color;
-            animal.textContent = animalType.emoji;
-            animal.animalType = animalType;
-            
-            // 隨機位置 (確保動物完全在遊戲區域內，根據動物大小調整)
-            const animalSize = window.innerWidth <= 480 ? 60 : (window.innerWidth <= 768 ? 70 : 80);
-            const maxX = gameArea.offsetWidth - animalSize;
-            const maxY = gameArea.offsetHeight - animalSize;
-            animal.style.left = Math.random() * maxX + 'px';
-            animal.style.top = Math.random() * maxY + 'px';
-            
-            // 點擊事件
-            animal.onclick = function() {
-                score += animalType.points;
-                document.getElementById('score').textContent = score;
-                totalHunts++;
-                
-                // 更新統計
-                updateStats(animalType);
-                
-                // 檢查升級
-                checkLevelUp();
-                
-                // 根據動物類型顯示不同反饋
-                if (animalType.points > 0) {
-                    showCelebration(`太棒了! 獵到${animalType.name}! +${animalType.points} 🎯`, '#00b894');
-                } else {
-                    // 按錯了草食/雜食動物，要扣血
-                    loseLife();
-                    showCelebration(`哎呀! ${animalType.name}是${animalType.type}動物! ${animalType.points} 💔`, '#d63031');
-                }
-                
-                // 移除動物
-                animal.remove();
-            };
-            
-            gameArea.appendChild(animal);
-            
-            // 5秒後自動移除動物 (給小孩更多時間觀察)
-            setTimeout(() => {
-                if (animal.parentNode) {
-                    // 只有肉食動物消失時才扣血(因為應該要抓但沒抓到)
-                    if (animalType.points > 0) {
-                        loseLife();
-                        showCelebration(`錯過了${animalType.name}! 💔`, '#d63031');
-                    }
-                    animal.remove();
-                }
-            }, 5000);
         }
-        
-        function showCelebration(message = '太棒了! 🎉', color = '#fdcb6e') {
-            const celebration = document.getElementById('celebration');
-            celebration.textContent = message;
-            celebration.style.color = color;
-            celebration.style.display = 'block';
-            setTimeout(() => {
-                celebration.style.display = 'none';
-            }, 800);
-        }
-        
-        function updateStats(animalType) {
-            // 更新統計數據
-            const category = animalType.type === '肉食' ? 'carnivore' : 
-                           animalType.type === '草食' ? 'herbivore' : 'omnivore';
+
+        // 頁面載入時初始化
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('遊戲中心已載入');
             
-            if (!stats[category][animalType.name]) {
-                stats[category][animalType.name] = { emoji: animalType.emoji, count: 0 };
-            }
-            stats[category][animalType.name].count++;
-            
-            // 添加到最近點擊記錄
-            const isCorrect = animalType.points > 0;
-            recentClicks.unshift({
-                emoji: animalType.emoji,
-                name: animalType.name,
-                points: animalType.points,
-                isCorrect: isCorrect,
-                time: new Date().toLocaleTimeString()
+            // 初始化護眼保護系統
+            eyeProtection = new EyeProtection({
+                customMessage: '小朋友，你已經在遊戲中心待了20分鐘了！<br>現在讓眼睛休息一下，看看遠方的風景吧～'
             });
             
-            // 只保留最近10次點擊
-            if (recentClicks.length > 10) {
-                recentClicks = recentClicks.slice(0, 10);
-            }
+            // 開始護眼保護計時
+            eyeProtection.start();
             
-            // 更新顯示
-            updateStatsDisplay();
-        }
-        
-        function updateStatsDisplay() {
-            // 更新肉食動物統計
-            const carnivoreDiv = document.getElementById('carnivoreStats');
-            carnivoreDiv.innerHTML = '';
-            for (const [name, data] of Object.entries(stats.carnivore)) {
-                carnivoreDiv.innerHTML += `
-                    <div class="stat-item carnivore-stat">
-                        <span>${data.emoji} ${name}</span>
-                        <span class="stat-count">${data.count}</span>
-                    </div>
-                `;
-            }
-            
-            // 更新草食動物統計
-            const herbivoreDiv = document.getElementById('herbivoreStats');
-            herbivoreDiv.innerHTML = '';
-            for (const [name, data] of Object.entries(stats.herbivore)) {
-                herbivoreDiv.innerHTML += `
-                    <div class="stat-item herbivore-stat">
-                        <span>${data.emoji} ${name}</span>
-                        <span class="stat-count">${data.count}</span>
-                    </div>
-                `;
-            }
-            
-            // 更新雜食動物統計
-            const omnivoreDiv = document.getElementById('omnivoreStats');
-            omnivoreDiv.innerHTML = '';
-            for (const [name, data] of Object.entries(stats.omnivore)) {
-                omnivoreDiv.innerHTML += `
-                    <div class="stat-item omnivore-stat">
-                        <span>${data.emoji} ${name}</span>
-                        <span class="stat-count">${data.count}</span>
-                    </div>
-                `;
-            }
-            
-            // 更新最近點擊記錄
-            const recentDiv = document.getElementById('recentClicks');
-            recentDiv.innerHTML = '';
-            for (const click of recentClicks) {
-                const resultClass = click.isCorrect ? 'correct' : 'incorrect';
-                const resultText = click.isCorrect ? '✅' : '❌';
-                recentDiv.innerHTML += `
-                    <div class="click-item">
-                        <span>${click.emoji} ${click.name}</span>
-                        <span class="click-result ${resultClass}">${resultText} ${click.points > 0 ? '+' : ''}${click.points}</span>
-                    </div>
-                `;
-            }
-        }
-        
-        function toggleRules() {
-            const rulesPanel = document.getElementById('rulesPanel');
-            const toggleIcon = document.getElementById('toggleIcon');
-            
-            rulesPanel.classList.toggle('collapsed');
-            toggleIcon.textContent = rulesPanel.classList.contains('collapsed') ? '📚' : '📖';
-        }
-        
-        function updateAnimalTypes() {
-            // 根據等級合併動物種類
-            currentAnimalTypes = {
-                carnivore: [...allAnimalTypes.level1.carnivore],
-                herbivore: [...allAnimalTypes.level1.herbivore],
-                omnivore: [...allAnimalTypes.level1.omnivore]
-            };
-            
-            if (level >= 5) {
-                currentAnimalTypes.carnivore.push(...allAnimalTypes.level5.carnivore);
-                currentAnimalTypes.herbivore.push(...allAnimalTypes.level5.herbivore);
-                currentAnimalTypes.omnivore.push(...allAnimalTypes.level5.omnivore);
-            }
-            
-            if (level >= 10) {
-                currentAnimalTypes.carnivore.push(...allAnimalTypes.level10.carnivore);
-                currentAnimalTypes.herbivore.push(...allAnimalTypes.level10.herbivore);
-                currentAnimalTypes.omnivore.push(...allAnimalTypes.level10.omnivore);
-            }
-            
-            if (level >= 15) {
-                currentAnimalTypes.carnivore.push(...allAnimalTypes.level15.carnivore);
-                currentAnimalTypes.herbivore.push(...allAnimalTypes.level15.herbivore);
-                currentAnimalTypes.omnivore.push(...allAnimalTypes.level15.omnivore);
-            }
-        }
-        
-        function checkLevelUp() {
-            // 每100分升一級
-            const newLevel = Math.floor(score / 100) + 1;
-            if (newLevel > level) {
-                const oldLevel = level;
-                level = newLevel;
-                document.getElementById('level').textContent = level;
-                
-                // 升級後速度變快 (最小間隔1秒)
-                currentSpeed = Math.max(1000, 3000 - (level - 1) * 200);
-                
-                // 更新可用動物種類
-                updateAnimalTypes();
-                
-                // 重新設定動物生成間隔
-                if (gameActive && ballCreationInterval) {
-                    clearInterval(ballCreationInterval);
-                    ballCreationInterval = setInterval(createAnimal, currentSpeed);
+            // 為遊戲卡片添加點擊事件（如果HomePage類沒有自動處理）
+            const gameCards = document.querySelectorAll('.game-card');
+            gameCards.forEach(card => {
+                if (!card.style.opacity || card.style.opacity === '1') {
+                    card.addEventListener('click', function() {
+                        const gameType = this.onclick ? 'animal-hunter' : null;
+                        if (gameType) {
+                            playGame(gameType);
+                        }
+                    });
                 }
-                
-                // 檢查是否在解鎖新動物的等級
-                let newAnimalsMessage = '';
-                if (level === 5) newAnimalsMessage = '解鎖新動物：豹、老鷹、鱷魚等！';
-                else if (level === 10) newAnimalsMessage = '解鎖海洋動物：章魚、烏賊、鯨魚等！';
-                else if (level === 15) newAnimalsMessage = '解鎖神秘生物：暴龍、龍等！';
-                
-                if (newAnimalsMessage) {
-                    showCelebration(`🎉 升級到等級 ${level}！${newAnimalsMessage}`, '#fdcb6e');
-                } else {
-                    showCelebration(`🎉 升級到等級 ${level}！速度加快了！`, '#fdcb6e');
-                }
+            });
+        });
+
+        // 離開頁面時清除計時器
+        window.addEventListener('beforeunload', function() {
+            if (eyeProtection) {
+                eyeProtection.cleanup();
             }
-        }
-        
-        function initHearts() {
-            const heartsContainer = document.getElementById('heartsContainer');
-            heartsContainer.innerHTML = '';
-            for (let i = 0; i < 10; i++) {
-                const heart = document.createElement('span');
-                heart.className = 'heart';
-                heart.textContent = '❤️';
-                heart.id = `heart-${i}`;
-                heartsContainer.appendChild(heart);
-            }
-        }
-        
-        function loseLife() {
-            if (lives > 0) {
-                lives--;
-                const heart = document.getElementById(`heart-${lives}`);
-                if (heart) {
-                    heart.classList.add('lost');
-                }
-                
-                if (lives <= 0) {
-                    gameOver();
-                }
-            }
-        }
-        
-        function gameOver() {
-            gameActive = false;
-            
-            // 停止創建新動物
-            if (ballCreationInterval) {
-                clearInterval(ballCreationInterval);
-            }
-            
-            // 清除所有動物
-            const gameArea = document.getElementById('gameArea');
-            gameArea.innerHTML = '';
-            
-            // 顯示遊戲結束畫面
-            document.getElementById('finalScore').textContent = score;
-            document.getElementById('finalLevel').textContent = level;
-            document.getElementById('totalHunts').textContent = totalHunts;
-            document.getElementById('gameOver').style.display = 'flex';
-        }
-        
-        function restartGame() {
-            document.getElementById('gameOver').style.display = 'none';
-            resetGame();
-            startGame();
-        }
-        
-        function startGame() {
-            gameActive = true;
-            score = 0;
-            level = 1;
-            lives = 10;
-            totalHunts = 0;
-            currentSpeed = 3000;
-            
-            document.getElementById('score').textContent = score;
-            document.getElementById('level').textContent = level;
-            
-            // 初始化可用動物種類
-            updateAnimalTypes();
-            
-            // 初始化愛心
-            initHearts();
-            
-            // 清除現有的動物
-            const gameArea = document.getElementById('gameArea');
-            gameArea.innerHTML = '';
-            
-            // 使用當前速度創建動物
-            ballCreationInterval = setInterval(createAnimal, currentSpeed);
-        }
-        
-        function resetGame() {
-            gameActive = false;
-            score = 0;
-            level = 1;
-            lives = 10;
-            totalHunts = 0;
-            currentSpeed = 3000;
-            
-            document.getElementById('score').textContent = score;
-            document.getElementById('level').textContent = level;
-            
-            // 重置統計數據
-            stats = {
-                carnivore: {},
-                herbivore: {},
-                omnivore: {}
-            };
-            recentClicks = [];
-            updateStatsDisplay();
-            
-            // 重置愛心
-            initHearts();
-            
-            // 停止創建新動物
-            if (ballCreationInterval) {
-                clearInterval(ballCreationInterval);
-            }
-            
-            // 清除所有動物
-            const gameArea = document.getElementById('gameArea');
-            gameArea.innerHTML = '';
-        }
-        
-        // 頁面載入時初始化，但不自動開始遊戲
-        window.onload = function() {
-            // 初始化可用動物種類
-            updateAnimalTypes();
-            // 初始化愛心顯示
-            initHearts();
-            // 初始化統計顯示
-            updateStatsDisplay();
-        };
+        });
     </script>
 </body>
 </html>

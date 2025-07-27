@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動物獵人遊戲 - 學習動物分類</title>
+    
+    <!-- 載入模塊化 CSS -->
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/game.css">
+    <link rel="stylesheet" href="assets/css/eye-protection.css">
+</head>
+<body>
+    <button class="back-button" onclick="goHome()">🏠</button>
+    <button class="fullscreen-button" onclick="toggleFullscreen()">📱</button>
+    
+    <h1>🏹 動物獵人遊戲 🦁</h1>
+    
+    <div class="game-container">
+        <div class="left-panel">
+            <div class="game-info">
+                <div class="stats-panel">
+                    <div class="stats-info">
+                        <div id="gameScore" class="score">分數: 0</div>
+                        <div id="gameLevel" class="level-info"><strong>等級:</strong> 1</div>
+                    </div>
+                    <div id="gameLives" class="lives"></div>
+                </div>
+            </div>
+            
+            <div class="game-area" id="gameArea"></div>
+            
+            <div class="controls">
+                <button id="startBtn">開始遊戲</button>
+                <button onclick="game.restart()">重新開始</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 遊戲結束覆蓋層和慶祝元素將由 AnimalHunterGame 類動態創建 -->
+
+    <!-- 載入模塊化 JavaScript - Clean Code 版本 -->
+    <script src="assets/js/utils/dom-utils.js"></script>
+    <script src="assets/js/utils/storage-utils.js"></script>
+    <script src="assets/js/utils/url-utils.js"></script>
+    <script src="assets/js/utils/math-utils.js"></script>
+    <script src="assets/js/utils/device-utils.js"></script>
+    <script src="assets/js/utils/function-utils.js"></script>
+    <script src="assets/js/utils-clean.js"></script>
+    <script src="assets/js/eye-protection-clean.js"></script>
+    <script src="assets/js/animal-hunter-clean.js"></script>
+    
+    <script>
+        // 全域變數
+        let game = null;
+        let eyeProtection = null;
+
+        // 頁面載入時初始化
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('動物獵人遊戲已載入');
+            
+            // 初始化護眼保護系統
+            eyeProtection = new EyeProtection({
+                onPause: () => {
+                    if (game) {
+                        game.pause();
+                        console.log('遊戲已暫停 - 護眼休息');
+                    }
+                },
+                onResume: () => {
+                    if (game) {
+                        game.resume();
+                        console.log('遊戲已恢復');
+                    }
+                },
+                customMessage: '小朋友，你已經玩了20分鐘了！<br>現在讓眼睛休息一下，看看遠方的風景吧～'
+            });
+            
+            // 初始化遊戲
+            game = new AnimalHunterGame('gameArea');
+            
+            // 綁定開始按鈕
+            const startBtn = document.getElementById('startBtn');
+            if (startBtn) {
+                startBtn.addEventListener('click', startGame);
+            }
+        });
+
+        function startGame() {
+            if (game) {
+                game.start();
+                eyeProtection.start();
+                
+                // 隱藏開始按鈕
+                const startBtn = document.getElementById('startBtn');
+                if (startBtn) {
+                    startBtn.style.display = 'none';
+                }
+            }
+        }
+
+        function goHome() {
+            // 清除資源
+            if (eyeProtection) {
+                eyeProtection.cleanup();
+            }
+            if (game) {
+                game.stop();
+            }
+            
+            // 使用通用方法導航，自動保持所有 URL 參數
+            URLUtils.navigateWithParams('index.html', URLUtils.getUrlParams());
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                // 進入全螢幕
+                document.documentElement.requestFullscreen().then(() => {
+                    console.log('已進入全螢幕模式');
+                    // 修改按鈕圖示
+                    document.querySelector('.fullscreen-button').textContent = '🔙';
+                }).catch(err => {
+                    console.log('無法進入全螢幕模式:', err);
+                });
+            } else {
+                // 退出全螢幕
+                document.exitFullscreen().then(() => {
+                    console.log('已退出全螢幕模式');
+                    // 恢復按鈕圖示
+                    document.querySelector('.fullscreen-button').textContent = '📱';
+                });
+            }
+        }
+
+        // 監聽全螢幕狀態變化
+        document.addEventListener('fullscreenchange', function() {
+            const fullscreenBtn = document.querySelector('.fullscreen-button');
+            if (document.fullscreenElement) {
+                fullscreenBtn.textContent = '🔙';
+                document.body.classList.add('fullscreen-mode');
+            } else {
+                fullscreenBtn.textContent = '📱';
+                document.body.classList.remove('fullscreen-mode');
+            }
+        });
+
+        // 離開頁面時清除資源
+        window.addEventListener('beforeunload', function() {
+            if (eyeProtection) {
+                eyeProtection.cleanup();
+            }
+            if (game) {
+                game.stop();
+            }
+        });
+    </script>
+</body>
+</html>
